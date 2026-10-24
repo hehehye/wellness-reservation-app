@@ -3,6 +3,7 @@ import KakaoLoginButton, {
   GoogleLoginButton,
 } from "@/features/auth/components/SocialAuth";
 import PageHeader from "@/features/shared/ui/PageHeader";
+import Link from "next/link";
 
 function SosialAuthSection() {
   return (
@@ -29,8 +30,16 @@ export default function Page() {
           <span className="shrink-0 text-xs text-ink-3">또는</span>
           <div className="h-px flex-1 bg-line" />
         </div>
-        
-        <SosialAuthSection/>
+
+        <SosialAuthSection />
+
+        <div>
+          <Link href={`/signup`}>
+            <span className="py-5 text-muted justify-center flex underline underline-muted">
+              회원가입
+            </span>
+          </Link>
+        </div>
       </section>
     </div>
   );

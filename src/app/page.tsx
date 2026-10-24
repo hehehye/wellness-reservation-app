@@ -27,12 +27,17 @@ async function AuthLinks() {
     </>
   );
 }
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   return (
     <div>
       <MainHeader />
       <div className="pt-16">
         <h1>웰니스 예약시스템 홈페이지</h1>
+        <div>{session?.user.email}</div>
         <ul className="cursor-pointer">
           <Suspense fallback={null}>
             <AuthLinks />

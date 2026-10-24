@@ -5,7 +5,7 @@ const input = cva(
   [
     "block w-full rounded-control border bg-surface text-text",
     "placeholder:text-muted",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+    "focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-black",
     "disabled:cursor-not-allowed disabled:opacity-50",
   ],
   {

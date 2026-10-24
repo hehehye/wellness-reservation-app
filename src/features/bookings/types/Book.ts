@@ -1,4 +1,4 @@
-type BookingStatus =
+export type BookingStatus =
   | "pending"
   | "confirmed"
   | "completed"
@@ -11,7 +11,31 @@ type BookingStatus =
 export interface Booking {
   id: string;
   userId: string; // 예약한 유저
-  sessionId: string; 
+  sessionId: string;
   status: BookingStatus;
   holdExpiresAt: Date | null;
+}
+
+// GET /bookings/:id 응답 (API 원본 snake_case)
+interface PlaceId {
+  place_id: string;
+}
+interface Classes {
+  classes: PlaceId;
+}
+export interface BookingDetail {
+  id: string;
+  user_id: string;
+  session_id: string;
+  status: BookingStatus;
+  place_name: string;
+  class_title: string;
+  price: number;
+  start_at: string;
+  end_at: string;
+  hold_expires_at: string | null;
+  confirmed_at: string | null;
+  cancelled_at: string | null;
+  created_at: string;
+  class_sessions: Classes;
 }

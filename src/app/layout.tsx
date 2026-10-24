@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import BottomTab from "@/features/shared/ui/BottomTab";
+import KakaoScript from "@/features/shared/ui/KakaoScript";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +28,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="w-full m-auto border border-gray-100 min-h-full flex flex-col shadow-lg sm:max-w-[520px] lg:max-w-[520px]">
         <Toaster position="top-center" />
+        <KakaoScript />
         {children}
+        <BottomTab />
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { SignupField, signupSchema } from "../lib/schema";
-import { createClient } from "@/app/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/server"; 
 
 export type SignupState = {
   fieldErrors?: Partial<Record<SignupField, string>>; // 칸별 에러
@@ -59,7 +59,6 @@ export async function signUpAction(
   // 4. 메일 인증을 켜뒀으면 세션이 없음 → 안내만
   if (!data.session) {
     return { notice: "인증 메일을 보냈어요. 메일함에서 확인해주세요.", values };
-  }
-
+  } 
   redirect("/");
 }

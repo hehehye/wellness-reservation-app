@@ -1,16 +1,17 @@
 // 장소 , 스튜디오 개념
 export interface Place {
   id: string;
-  owner_id: string;
+  owner_id: string | null;
   name: string;
   category: string;
   description: string;
   address: string;
   lat: number;
   lng: number;
-  amenities: string;
+  amenities: string[];
   created_at: string;
-  // place_images: Place_images[];
+  isLiked: boolean;
+  imageUrl: string;
 }
 export interface Place_images {
   id: string;
@@ -22,11 +23,11 @@ export interface Place_images {
 // 수업의 틀. 여러개의 시간대로 만들어낼수있음
 export interface Class {
   id: string;
-  place_id: string;           // 어느 스튜디오의 수업인지
-  title: string;              // ex: 바벨 6:1수업
+  place_id: string; // 어느 스튜디오의 수업인지
+  title: string; // ex: 바벨 6:1수업
   description: string | null;
   price: number;
-  capacity: number;           // 기본 정원 (회차 만들 때 복사됨)
+  capacity: number; // 기본 정원 (회차 만들 때 복사됨)
   duration_min: number;
   guide: string | null;
   is_active: boolean;

@@ -2,7 +2,7 @@
 import { Button } from "@/features/shared/ui/Button";
 import { FormField } from "@/features/shared/ui/FormField";
 import { Input } from "@/features/shared/ui/Input";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import {
   emailSchema,
   nicknameSchema,
@@ -11,6 +11,7 @@ import {
 } from "../lib/schema";
 import { signUpAction } from "../hooks/form-sign.actions";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function SignForm() {
   const [state, action, isPending] = useActionState(signUpAction, null);
@@ -23,6 +24,10 @@ export default function SignForm() {
   const [nicknameError, setNicknameError] = useState<string | null>(null);
   const serverEmailError =
     state?.values.email === email ? state?.fieldErrors?.email : null;
+  useEffect(() => {
+    if (state?.error) toast.error(state.error);
+    if (state?.notice) toast.success(state.notice);
+  }, [state]);
 
   // 메일 인증 안내가 오면 폼 대신 안내 화면
   if (state?.notice) {
