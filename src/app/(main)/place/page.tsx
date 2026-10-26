@@ -27,7 +27,9 @@ export default async function Page({
     <div>
       <PageHeader title="플레이스" back home />
       <main className="px-page pt-16 pb-6">
-        <SearchBar />
+        <Suspense fallback={<div className="h-11" />}>
+          <SearchBar />
+        </Suspense>
         <div className="pt-3">
           {/* key로 검색어가 바뀔 때마다 스켈레톤을 다시 보여준다 */}
           <Suspense key={q ?? ""} fallback={<PlaceListSkeleton />}>

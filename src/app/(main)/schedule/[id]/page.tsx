@@ -101,6 +101,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
       value: `${dateFormatter.format(opensAt)} ${timeFormatter.format(opensAt)}`,
     },
   ];
+  const soldOut = sessionItem.remaining <= 0;
   return (
     <div>
       <PageHeader title="수업 상세정보" back />
@@ -109,7 +110,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         <section className="px-page pt-5">
           <Link
             href={`/place/${place.id}`}
-            className="inline-flex items-center text-sm font-medium text-primary"
+            className="inline-flex items-center text-sm font-medium text-soft"
           >
             {place.name}
             <ChevronRight className="size-4" aria-hidden />
@@ -122,7 +123,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         </section>
 
         {/* 현재 세션 일정 */}
-        <section className="px-page pt-6">
+        <section className="px-page pt-10">
           <h3 className="font-bold text-text">수업 일정</h3>
           <dl className="mt-2 divide-y divide-line rounded-card border border-border bg-surface px-4">
             {scheduleRows.map(({ icon: Icon, label, value }) => (
@@ -150,7 +151,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         {/* 안내사항 */}
         <section className="px-page pt-6">
           <h3 className="font-bold text-text">안내사항</h3>
-          <ul className="mt-2 list-disc space-y-1 rounded-card bg-primary-soft/40 py-4 pr-4 pl-8 text-sm text-text">
+          <ul className="mt-2 list-disc space-y-1 rounded-card bg-primary-soft/20 py-4 pr-4 pl-8 text-sm text-text">
             {NOTICES.map((notice) => (
               <li key={notice}>{notice}</li>
             ))}
@@ -164,6 +165,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         bookingOpen={bookingOpen}
         sessionId={id}
         placeName={place.name}
+        soldOut={soldOut}
       />
     </div>
   );

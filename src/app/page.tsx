@@ -4,6 +4,7 @@ import { createClient } from "./utils/supabase/server";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import Logoutbutton from "@/features/auth/components/LogoutButton";
+import RecentPlacesSection from "@/features/places/components/RecentPlacesSection";
 
 async function AuthLinks() {
   await connection(); // 요청 때 실행하겠다고 선언
@@ -36,8 +37,7 @@ export default async function Home() {
     <div>
       <MainHeader />
       <div className="pt-16">
-        <h1>웰니스 예약시스템 홈페이지</h1>
-        <div>{session?.user.email}</div>
+        {/* <div>{session?.user.email}</div>
         <ul className="cursor-pointer">
           <Suspense fallback={null}>
             <AuthLinks />
@@ -45,7 +45,8 @@ export default async function Home() {
           <li>
             <Link href="/place">플레이스</Link>
           </li>
-        </ul>
+        </ul> */}
+        <RecentPlacesSection />
       </div>
     </div>
   );

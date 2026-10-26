@@ -56,11 +56,6 @@ export default function PaymentForm({ booking, customerKey }: Props) {
     setAgreed({ refund: next, privacy: next, payment: next });
   };
 
-  async function handlePay() {
-    if (!canPay) return;
-    // TODO: PG 결제 연동 (method, booking.id, booking.price)
-  }
-  console.log(booking);
   return (
     <>
       {isPending && booking.hold_expires_at && (

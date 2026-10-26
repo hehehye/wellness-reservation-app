@@ -1,3 +1,6 @@
+export interface Review_count {
+  place_reviews: string;
+}
 // 장소 , 스튜디오 개념
 export interface Place {
   id: string;
@@ -12,7 +15,9 @@ export interface Place {
   created_at: string;
   isLiked: boolean;
   imageUrl: string;
+  _count: Review_count;
 }
+
 export interface Place_images {
   id: string;
   place_id: string;

@@ -18,7 +18,7 @@ export default async function Page({
   if (!session) redirect(`/login?next=/payment/${bookingId}`);
 
   const booking = await getBooking(bookingId, session.access_token);
-  console.log(booking);
+
   return (
     <div className="min-h-dvh bg-stone-50">
       <PageHeader title="결제하기" back />

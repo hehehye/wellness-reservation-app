@@ -52,7 +52,6 @@ export default async function Page() {
   const name: string =
     meta.full_name ?? meta.name ?? meta.nickname ?? "로그인이 필요합니다.";
   const nickname: string = meta.nickname ?? user?.email?.split("@")[0] ?? "";
-  console.log(user);
   return (
     <div>
       <PageHeader title="마이페이지" />
@@ -60,7 +59,7 @@ export default async function Page() {
         {/* 프로필 카드 */}
         <section className="flex items-center gap-4 rounded-card border border-border bg-surface p-4">
           {/* 프로필 이미지 준비 전까지 더미 아바타 */}
-          <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+          <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-soft/20 text-primary">
             <UserRound className="size-8" aria-hidden />
           </div>
           <div className="min-w-0 flex-1">

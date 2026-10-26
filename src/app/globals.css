@@ -2,13 +2,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #221e1d;
+  --color-primary: #3a2e28;
   --color-primary-soft: #cecdcd;
   --color-danger: #cf0808;
   --color-surface: #ffffff;
   --color-bg: #faf8f5;
   --color-text: #1f2937;
   --color-muted: #6b7280;
+  --color-soft: #aca5a4;
   --color-border: #ece7df;
   --color-line: #e4e7ec;
   --color-line-strong: #cfd4dc;
@@ -21,5 +22,5 @@
 
 .test {
   color: #221e1d;
-  background: #cecdcd
+  background: #aca5a5
 }

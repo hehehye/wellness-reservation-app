@@ -1,37 +1,76 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { ko } from "date-fns/locale";
-import "react-day-picker/style.css";
 import { SessionItem } from "../types/Session";
+import { useRouter } from "next/navigation";
+
+const ymd = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+const kstYmd = (iso: string) =>
+  new Date(new Date(iso).getTime() + 9 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
 
 export default function SessionCalendar({
   sessions,
+  id,
 }: {
   sessions: SessionItem[];
+  id: string;
 }) {
-  const [selected, setSelected] = useState<Date | undefined>();
   const defaults = getDefaultClassNames();
-  const sessionDates = sessions.map((s) => new Date(s.start_at));
-  console.log(sessionDates);
+  const router = useRouter();
+
+  const available = useMemo(
+    () => new Set(sessions.map((s) => kstYmd(s.start_at))),
+    [sessions],
+  );
+
+  const todayStr = new Date().toLocaleDateString("sv-SE", {
+    timeZone: "Asia/Seoul",
+  });
+  const [selected, setSelected] = useState<Date | undefined>(
+    () => new Date(`${todayStr}T00:00:00`),
+  );
+
+  useEffect(() => {
+    router.replace(`/place/${id}/schedule?selectedDate=${todayStr}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <DayPicker
       mode="single"
       selected={selected}
-      onSelect={setSelected}
-      locale={ko}
-      modifiers={{ hasSession: sessionDates }} // 해당하는 수업 날짜에 점을 추가한다.
-      modifiersClassNames={{
-        hasSession:
-          "relative after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-green-300",
+      onSelect={(date) => {
+        setSelected(date);
+        if (date)
+          router.push(`/place/${id}/schedule?selectedDate=${ymd(date)}`);
       }}
-      disabled={{ before: new Date() }} // 오늘 이전은 선택 불가
+      locale={ko}
+      disabled={[{ before: new Date() }, (d: Date) => !available.has(ymd(d))]}
+      modifiers={{ sunday: { dayOfWeek: [0] } }}
+      modifiersClassNames={{ sunday: "text-red-400" }}
       classNames={{
-        root: `${defaults.root}  rounded-2xl border border-border bg-surface p-3`,
-        caption_label: `${defaults.caption_label} text-base font-bold`,
-        today: "text-primary font-bold",
-        selected: "bg-primary text-white rounded-full",
-        disabled: "opacity-30",
+        root: `${defaults.root} w-full bg-surface px-2`,
+        months: "relative w-full ",
+        month: "w-full ",
+        month_grid: "w-full ",
+        month_caption: " flex h-10 items-center justify-center",
+        caption_label: "py-4 text-lg font-bold",
+        nav: "absolute inset-x-0 top-0 px-4 z-10 flex h-10 items-center justify-between",
+        weekdays:
+          "[&>th:first-child]:text-red-400 [&>th:last-child]:text-sky-400",
+        weekday: "pt-6 text-sm font-medium text-muted",
+        day: "py-2 h-12 w-auto p-0 text-sm text-text",
+        day_button:
+          "mx-auto flex size-10 items-center justify-center rounded-full",
+        today: "font-bold text-primary",
+        selected:
+          "[&>button]:bg-primary! [&>button]:text-white! [&>button]:font-bold [&>button]:border-transparent!",
+        disabled: "opacity-40",
       }}
     />
   );

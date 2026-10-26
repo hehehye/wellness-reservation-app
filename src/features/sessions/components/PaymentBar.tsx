@@ -3,7 +3,6 @@
 import BottomFixedBar from "@/features/shared/ui/BottomFixedBar";
 import { formatPrice } from "../lib/format";
 import { Button } from "@/features/shared/ui/Button";
-import Link from "next/link";
 import { ClassInfo } from "../types/Session";
 import { createClient } from "@/app/utils/supabase/client";
 import { createBooking } from "@/features/bookings/api/bookings";
@@ -15,34 +14,15 @@ interface Props {
   bookingOpen: boolean;
   sessionId: string;
   placeName: string;
+  soldOut: boolean;
 }
-interface Order {
-  id: string;
-  session_id: string;
-  status: string;
-  place_name: string;
-  class_title: string;
-  qty: number;
-  price: number;
-}
+
 export default function PaymentBar({
   classes,
   bookingOpen,
   sessionId,
-  placeName,
+  soldOut,
 }: Props) {
-  // function createOrder() {
-  //   const newOrder: Order = {
-  //     id: crypto.randomUUID(),
-  //     session_id: sessionId,
-  //     status: "예약대기",
-  //     place_name: placeName,
-  //     class_title: classes.title,
-  //     qty: 1,
-  //     price: classes.price,
-  //   };
-  //   return newOrder;
-  // }
   const router = useRouter();
   const supabase = createClient();
   async function handleReserve() {
@@ -57,6 +37,8 @@ export default function PaymentBar({
       toast.error(e instanceof Error ? e.message : "예약에 실패했어요");
     }
   }
+  const label = !bookingOpen ? "예약 오픈 전" : soldOut ? "마감" : "예약하기";
+  const disabled = !bookingOpen || soldOut;
   return (
     <BottomFixedBar>
       <div className="flex w-full items-center gap-3 px-page">
@@ -69,11 +51,9 @@ export default function PaymentBar({
             handleReserve();
           }}
           className="flex-1"
-          disabled={!bookingOpen}
+          disabled={disabled}
         >
-          {/* <Link href={`/payment/1`}> */}
-          {bookingOpen ? "예약하기" : "예약 오픈 전"}
-          {/* </Link> */}
+          {label}
         </Button>
       </div>
     </BottomFixedBar>

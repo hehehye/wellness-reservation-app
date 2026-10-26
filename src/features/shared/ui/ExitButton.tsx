@@ -16,7 +16,7 @@ export function ExitButton() {
     </button>
   );
 }
-export function BackButton() {
+export function BackButton({ color = "black" }: { color?: string }) {
   const router = useRouter();
   return (
     <button
@@ -25,7 +25,7 @@ export function BackButton() {
       onClick={() => router.back()}
       aria-label="뒤로가기"
     >
-      <ChevronLeft />
+      <ChevronLeft color={color} />
     </button>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { ItemStyles, Rating, Star } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
@@ -11,15 +10,20 @@ const starStyles: ItemStyles = {
   inactiveFillColor: "#f3f4f6", // 선택 안 된 별 안쪽 색
   inactiveStrokeColor: "#d1d5db", // 선택 안 된 별 테두리 색
 };
-export function StarRating() {
-  const [value, setValue] = useState(0);
+export function StarRating({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+}) {
   return (
     <Rating
       itemStyles={starStyles}
-      spaceBetween={"small"}
+      spaceBetween="small"
       style={{ maxWidth: 240 }}
       value={value}
-      onChange={setValue}
+      onChange={onChange}
     />
   );
 }

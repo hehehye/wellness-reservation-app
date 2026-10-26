@@ -42,10 +42,12 @@ export default async function Page({ params }: PageProps<"/booking/[id]">) {
   if (!session) redirect(`/login?next=/booking/${id}`);
 
   const booking = await getBooking(id, session.access_token);
-  const guide = getBookingGuide(booking, new Date());
+  const isWritten = booking.hasReview;
+  const guide = getBookingGuide(booking, new Date(), isWritten);
   const status = BOOKING_STATUS[booking.status];
   const isPaid =
     booking.status === "confirmed" || booking.status === "completed";
+
   return (
     <div className="min-h-dvh bg-stone-50">
       <PageHeader title="예약 상세" back home />

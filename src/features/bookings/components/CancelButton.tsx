@@ -19,6 +19,9 @@ export default function CancelButton({ id, token }: Props) {
       router.refresh();
     } catch (error) {
       console.error(error);
+      toast.error(
+        error instanceof Error ? error.message : "예약 취소에 실패했어요",
+      );
     }
   };
   return (

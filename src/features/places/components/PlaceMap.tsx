@@ -1,5 +1,4 @@
 import { Building2, MapPin, Navigation } from "lucide-react";
-import { KakaoMap } from "@/features/shared/ui/KakaoMap";
 import { Place } from "../types/Place";
 import { MiniMap } from "@/features/shared/ui/MiniMap";
 type Props = {

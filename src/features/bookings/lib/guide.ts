@@ -1,10 +1,10 @@
 import type { BookingDetail } from "../types/Book";
 
 export type GuideTone =
+  | "none"
   | "info"
   | "soon"
   | "active"
-  | "done"
   | "warning"
   | "muted";
 
@@ -31,10 +31,10 @@ export const getDayDiff = (target: Date, now: Date) =>
 export function getBookingGuide(
   booking: Pick<BookingDetail, "id" | "status" | "start_at" | "end_at">,
   now: Date,
+  isWritten: boolean,
 ): BookingGuide {
   const start = new Date(booking.start_at);
-  const end = new Date(booking.end_at);
-
+  const isWrittenReview = isWritten;
   switch (booking.status) {
     case "pending":
       return {
@@ -57,14 +57,23 @@ export function getBookingGuide(
         description: "예약 시간에 방문하지 않아 만료 처리되었어요.",
       };
   }
-
-  // confirmed / completed: 시간 기준으로 안내
-  if (now >= end || booking.status === "completed") {
+  if (booking.status === "completed") {
+    if (isWrittenReview) {
+      return {
+        tone: "none",
+        title: "후기를 남겨 주셔서 감사해요",
+        description: "소중한 후기가 다른 분들에게 도움이 돼요.",
+        // action 없음 → 버튼이 안 보여요
+      };
+    }
     return {
-      tone: "done",
-      title: "체험은 즐거우셨나요?",
+      tone: "none",
+      title: "체험은 즐거우셨나요?🧘🏻‍♀️",
       description: "더 나은 경험을 위해 후기를 남겨주세요.",
-      action: { label: "후기 남기기", href: "/review/write" },
+      action: {
+        label: "리뷰 남기기",
+        href: `/review/write?bookingId=${booking.id}`,
+      },
     };
   }
   if (now >= start) {

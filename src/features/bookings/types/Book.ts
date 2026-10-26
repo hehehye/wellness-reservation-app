@@ -38,4 +38,5 @@ export interface BookingDetail {
   cancelled_at: string | null;
   created_at: string;
   class_sessions: Classes;
+  hasReview: boolean;
 }

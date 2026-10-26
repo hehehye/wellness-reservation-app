@@ -4,13 +4,24 @@ import { Button } from "@/features/shared/ui/Button";
 import { StarRating } from "./StarRating";
 import { ImageStrip } from "@/features/shared/ui/ImageStrip";
 import { usePostDraft } from "@/features/shared/hooks/usePostDraft";
-
-export default function ReviewWriteForm() {
+import { ReviewActions } from "../lib/ReviewActions";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+export default function ReviewWriteForm({ bookingId }: { bookingId: string }) {
+  const [state, formAction, pending] = useActionState(ReviewActions, undefined);
   const { draft, error, addFiles, removeImage, setField, canSubmit } =
     usePostDraft();
-  // const [state, form, error] = useFormState
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    if (state?.error) toast.error(state.error);
+  }, [state]);
+
   return (
-    <form action="">
+    <form action={formAction}>
+      {" "}
+      <input type="hidden" name="rating" value={rating} />
+      <input type="hidden" name="bookingId" value={bookingId} />
       {/* 이미지 */}
       <section aria-labelledby="images-label" className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
@@ -33,14 +44,19 @@ export default function ReviewWriteForm() {
         )}
       </section>
       <section className="mt-8 w-full flex justify-center">
-        <StarRating />
+        <StarRating value={rating} onChange={setRating} />
       </section>
       <textarea
         placeholder="체험 경험을 솔직하게 적어주세요."
         name="content"
         className="my-4 block h-48 w-full resize-none border border-gray-200 p-2 text-left align-top leading-normal"
       />
-      <br /> <Button className="w-full">작성하기</Button>
+      <br />
+      <div className="py-1">
+        {state?.error && <p className="text-red-500">{state.error}</p>}
+        {state?.success && <p className="text-green-600">{state.success}</p>}
+      </div>
+      <Button className="w-full">{pending ? "작성중..." : "작성하기"}</Button>
     </form>
   );
 }

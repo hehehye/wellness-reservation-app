@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { ImageIcon } from "lucide-react";
+import { Check, ChevronRight, ImageIcon, Star } from "lucide-react";
 import { getPlace } from "@/features/places/api/getPlaces";
 import PlaceDetailSkeleton from "@/features/places/components/PlaceDetailSkeleton";
-import PageHeader from "@/features/shared/ui/PageHeader";
 import LikeButton from "@/features/likes/components/LikeButton";
 import BottomFixedBar from "@/features/shared/ui/BottomFixedBar";
 import { Button } from "@/features/shared/ui/Button";
@@ -13,7 +12,36 @@ import Image from "next/image";
 import { getSessions } from "@/features/sessions/api/sessions";
 import SessionCarousel from "@/features/sessions/components/SessionCarousel";
 import PlaceMap from "@/features/places/components/PlaceMap";
+import RecordRecentPlace from "@/features/places/components/RecordRecentPlace";
+import PlaceHeader from "@/features/places/components/PlaceHeader";
+import {
+  Coffee,
+  Dumbbell,
+  Lock,
+  ParkingCircle,
+  ShowerHead,
+  Shirt,
+  Sparkles,
+  Wifi,
+  type LucideIcon,
+} from "lucide-react";
 
+// 편의시설 이름 → 아이콘 (이름에 키워드가 들어 있으면 매칭)
+const AMENITY_ICONS: [keyword: string, icon: LucideIcon][] = [
+  ["요가매트", Dumbbell],
+  ["탈의", Shirt],
+  ["음료", Coffee],
+  ["샤워", ShowerHead],
+  ["와이파이", Wifi],
+  ["wifi", Wifi],
+  ["주차", ParkingCircle],
+  ["사물함", Lock],
+];
+
+const getAmenityIcon = (name: string): LucideIcon =>
+  AMENITY_ICONS.find(([keyword]) =>
+    name.toLowerCase().includes(keyword),
+  )?.[1] ?? Sparkles; // 모르는 항목의 공통 아이콘
 // 헤더 타이틀도 place.name에 의존하므로 헤더까지 Suspense 안쪽에서 렌더링
 async function PlaceDetail({ id }: { id: string }) {
   const supabase = await createClient();
@@ -26,16 +54,24 @@ async function PlaceDetail({ id }: { id: string }) {
     getSessions(id),
   ]);
   if (!place) notFound();
+  console.log(place);
   return (
     <div>
-      <PageHeader title={place.name} back home />
-      <main className="pt-14 pb-28">
-        <div className="relative flex aspect-video items-center justify-center bg-primary-soft text-muted">
+      <RecordRecentPlace
+        id={place.id}
+        name={place.name}
+        category={place.category}
+        imageUrl={place.imageUrl}
+      />
+      <PlaceHeader title={place.name} back home />
+      <main className="pb-28">
+        <div className="relative flex h-92 items-center justify-center bg-primary-soft text-muted">
           {place.imageUrl ? (
             <Image
               src={place.imageUrl}
               alt={place.name}
               fill
+              sizes="100vw"
               className="object-cover"
             />
           ) : (
@@ -43,15 +79,28 @@ async function PlaceDetail({ id }: { id: string }) {
               <ImageIcon className="size-8" aria-hidden />
             </div>
           )}
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-black/10 to-transparent" />
         </div>
 
         <section className="px-page pt-5">
           <div className="flex justify-between">
             <div>
-              <span className="text-sm font-medium text-primary">
+              <span className="text-sm font-bold text-text">
                 {place.category}
               </span>
               <h2 className="mt-1 text-xl font-bold text-text">{place.name}</h2>
+              <div>
+                <Link
+                  href={`/place/${id}/review`}
+                  className="flex items-center gap-2 py-2"
+                >
+                  <Star size={18} fill="#facc15" stroke="#facc15" />
+                  <span className="font-bold text-sm">
+                    {place._count.place_reviews}개 리뷰
+                  </span>
+                  <ChevronRight size={16} color="var(--color-soft)" />
+                </Link>
+              </div>
             </div>
             <div>
               <LikeButton
@@ -61,25 +110,10 @@ async function PlaceDetail({ id }: { id: string }) {
               />
             </div>
           </div>
-          <p className="mt-1 text-sm text-muted">{place.address}</p>
-          <p className="mt-4 text-text">{place.description}</p>
+          <p className="mt-1 text-sm font-medium text-muted">{place.address}</p>
         </section>
-        {place.amenities.length > 0 && (
-          <section className="px-page pt-6">
-            <h3 className="font-bold text-text">편의시설</h3>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {place.amenities.map((amenity) => (
-                <li
-                  key={amenity}
-                  className="rounded-full border border-border px-3 py-1 text-sm text-muted"
-                >
-                  {amenity}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-        <section className="pt-6">
+
+        <section className="pt-4">
           <div className="pt-5 pb-1.5 px-page flex justify-between itmes=center">
             <h3 className="font-bold text-text">수업</h3>
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-primary transition hover:bg-bg">
@@ -89,12 +123,32 @@ async function PlaceDetail({ id }: { id: string }) {
           {sessions.length > 0 ? (
             <SessionCarousel sessions={sessions} />
           ) : (
-            <p className="mt-2 px-page text-sm text-muted">
-              예정된 수업이 없습니다.
+            <p className="mt-2 px-page text-center py-16 text-sm text-muted">
+              아직 예정된 수업이 없습니다.
             </p>
           )}
         </section>
-
+        {place.amenities.length > 0 && (
+          <section className="px-page pt-6 ">
+            <h3 className="font-bold text-text  pb-1.5">편의시설</h3>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {place.amenities.map((amenity) => {
+                const Icon = getAmenityIcon(amenity);
+                return (
+                  <li
+                    key={amenity}
+                    className="flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-1.5
+                     text-sm font-medium text-text transition duration-200 ease-out 
+                     hover:-translate-y-0.5 hover:border-soft/30 hover:bg-bg motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  >
+                    <Icon className="size-3.5 text-primary" aria-hidden />
+                    {amenity}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
         <PlaceMap place={place} />
         <BottomFixedBar>
           <Button className="w-full py-2 mx-2">
