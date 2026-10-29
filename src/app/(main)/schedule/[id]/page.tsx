@@ -47,7 +47,9 @@ function SeatStatus({
           "rounded-full px-2 py-0.5 text-xs font-bold",
           soldOut && "bg-gray-100 text-muted",
           almost && "bg-red-50 text-red-600",
-          !soldOut && !almost && "bg-primary-soft text-primary",
+          !soldOut &&
+            !almost &&
+            "bg-primary-soft/10 border border-border text-primary",
         )}
       >
         {soldOut
@@ -103,9 +105,9 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
   ];
   const soldOut = sessionItem.remaining <= 0;
   return (
-    <div>
+    <div className="pb-16">
       <PageHeader title="수업 상세정보" back />
-      <main className="pt-14 pb-24">
+      <main className="pt-14">
         {/* 수업 정보 (classes) */}
         <section className="px-page pt-5">
           <Link
@@ -139,8 +141,8 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         {/* 장소 */}
         <section className="px-page pt-6">
           <h3 className="font-bold text-text">장소</h3>
-          <div className="mt-2 flex items-start gap-3 rounded-card border border-border bg-surface p-4 text-sm">
-            <MapPin className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden />
+          <div className="mt-2 flex items-center gap-3 rounded-card border border-border bg-surface p-4 text-sm">
+            <MapPin className=" size-4 shrink-0 text-muted" aria-hidden />
             <div>
               <p className="font-medium text-text">{place.name}</p>
               <p className="mt-0.5 text-muted">{place.address}</p>
@@ -151,7 +153,7 @@ export default async function Page({ params }: PageProps<"/schedule/[id]">) {
         {/* 안내사항 */}
         <section className="px-page pt-6">
           <h3 className="font-bold text-text">안내사항</h3>
-          <ul className="mt-2 list-disc space-y-1 rounded-card bg-primary-soft/20 py-4 pr-4 pl-8 text-sm text-text">
+          <ul className="mt-2 list-disc space-y-1 rounded-card bg-primary-soft/10 py-4 pr-4 pl-8 text-sm text-text">
             {NOTICES.map((notice) => (
               <li key={notice}>{notice}</li>
             ))}

@@ -32,7 +32,7 @@ export default function LikePlaceCard({ place }: Props) {
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <span className="text-xs font-medium text-primary">
+          <span className="text-xs font-medium text-text">
             {place.category}
           </span>
           <h3 className="mt-0.5 truncate font-bold text-text">{place.name}</h3>

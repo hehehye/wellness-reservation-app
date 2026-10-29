@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { Check, ChevronRight, ImageIcon, Star } from "lucide-react";
+import { ChevronRight, ImageIcon, Star } from "lucide-react";
 import { getPlace } from "@/features/places/api/getPlaces";
 import PlaceDetailSkeleton from "@/features/places/components/PlaceDetailSkeleton";
 import LikeButton from "@/features/likes/components/LikeButton";
@@ -25,8 +25,9 @@ import {
   Wifi,
   type LucideIcon,
 } from "lucide-react";
+import ShareButton from "@/features/shared/ui/ShareButton";
 
-// 편의시설 이름 → 아이콘 (이름에 키워드가 들어 있으면 매칭)
+// 편의시설 이름 -> 아이콘
 const AMENITY_ICONS: [keyword: string, icon: LucideIcon][] = [
   ["요가매트", Dumbbell],
   ["탈의", Shirt],
@@ -37,12 +38,35 @@ const AMENITY_ICONS: [keyword: string, icon: LucideIcon][] = [
   ["주차", ParkingCircle],
   ["사물함", Lock],
 ];
-
 const getAmenityIcon = (name: string): LucideIcon =>
   AMENITY_ICONS.find(([keyword]) =>
     name.toLowerCase().includes(keyword),
-  )?.[1] ?? Sparkles; // 모르는 항목의 공통 아이콘
-// 헤더 타이틀도 place.name에 의존하므로 헤더까지 Suspense 안쪽에서 렌더링
+  )?.[1] ?? Sparkles;
+
+// 1) SEO 메타데이터
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const place = await getPlace(id);
+
+  const title = `${place.name} | wellness`;
+  const description = `${place.name}에서 나에게 맞는 웰니스 활동을 만나보세요.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: place.imageUrl ? [{ url: place.imageUrl }] : [],
+    },
+  };
+}
+
 async function PlaceDetail({ id }: { id: string }) {
   const supabase = await createClient();
   const {
@@ -54,7 +78,6 @@ async function PlaceDetail({ id }: { id: string }) {
     getSessions(id),
   ]);
   if (!place) notFound();
-  console.log(place);
   return (
     <div>
       <RecordRecentPlace
@@ -64,7 +87,7 @@ async function PlaceDetail({ id }: { id: string }) {
         imageUrl={place.imageUrl}
       />
       <PlaceHeader title={place.name} back home />
-      <main className="pb-28">
+      <main className="pb-16">
         <div className="relative flex h-92 items-center justify-center bg-primary-soft text-muted">
           {place.imageUrl ? (
             <Image
@@ -83,7 +106,7 @@ async function PlaceDetail({ id }: { id: string }) {
         </div>
 
         <section className="px-page pt-5">
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <div>
               <span className="text-sm font-bold text-text">
                 {place.category}
@@ -102,12 +125,15 @@ async function PlaceDetail({ id }: { id: string }) {
                 </Link>
               </div>
             </div>
-            <div>
+            <div className="flex items-center mb-3">
               <LikeButton
                 placeId={place.id}
                 initialWish={place.isLiked}
                 likeCount={0}
               />
+              <div className="ml-[-14px]">
+                <ShareButton placeId={place.id} />
+              </div>
             </div>
           </div>
           <p className="mt-1 text-sm font-medium text-muted">{place.address}</p>
@@ -116,7 +142,7 @@ async function PlaceDetail({ id }: { id: string }) {
         <section className="pt-4">
           <div className="pt-5 pb-1.5 px-page flex justify-between itmes=center">
             <h3 className="font-bold text-text">수업</h3>
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-primary transition hover:bg-bg">
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text transition hover:bg-bg">
               <Link href={`/place/${id}/schedule`}>일정보기</Link>
             </span>
           </div>
@@ -159,7 +185,7 @@ async function PlaceDetail({ id }: { id: string }) {
     </div>
   );
 }
-
+// 2. 페이지 본문
 export default async function Page({ params }: PageProps<"/place/[id]">) {
   const { id } = await params;
 

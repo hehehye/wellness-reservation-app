@@ -21,12 +21,28 @@ export async function fetchReview(id: string) {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/reviews/${id}`,
   );
-  const res = await fetch(url, {
-    next: { revalidate: 60, tags: ["reviews"] },
-  });
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`리뷰 목록을 불러오지 못했습니다. (${res.status})`);
   }
 
+  return res.json();
+}
+export async function deleteReview(id: string, token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/reviews/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message ?? "댓글삭제에 실패했어요");
+  }
   return res.json();
 }

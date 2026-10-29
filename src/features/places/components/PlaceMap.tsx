@@ -6,14 +6,14 @@ type Props = {
 };
 export default function PlaceMap({ place }: Props) {
   return (
-    <section className="mb-20 pt-6 px-page">
+    <section className="mb-12 pt-6 px-page">
       <div className="flex justify-between items-center pt-5 pb-1.5">
         <h3 className="font-bold text-text">장소 정보</h3>
         <a
           href={`https://map.kakao.com/link/to/${encodeURIComponent(place.name)},${place.lat},${place.lng}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-primary transition hover:bg-bg"
+          className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text transition hover:bg-bg"
         >
           <Navigation className="size-3" aria-hidden />
           길찾기
@@ -43,7 +43,7 @@ export default function PlaceMap({ place }: Props) {
               href={`https://map.kakao.com/link/to/${encodeURIComponent(place.name)},${place.lat},${place.lng}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-primary transition hover:bg-bg"
+              className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text transition hover:bg-bg"
             >
               <Navigation className="size-3" aria-hidden />
               길찾기

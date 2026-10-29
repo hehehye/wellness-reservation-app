@@ -26,7 +26,7 @@ const MENU_GROUPS: { title: string; items: MenuItem[] }[] = [
     title: "나의 활동",
     items: [
       { href: "/booking", label: "예약 관리", icon: CalendarCheck },
-      { href: "/my/order", label: "결제 내역", icon: Receipt },
+      // { href: "/my/order", label: "결제 내역", icon: Receipt },
       { href: "/like", label: "나의 찜", icon: Heart },
       { href: "/my/review", label: "나의 리뷰", icon: MessageSquareText },
     ],
@@ -59,7 +59,7 @@ export default async function Page() {
         {/* 프로필 카드 */}
         <section className="flex items-center gap-4 rounded-card border border-border bg-surface p-4">
           {/* 프로필 이미지 준비 전까지 더미 아바타 */}
-          <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-soft/20 text-primary">
+          <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-soft/20 text-text">
             <UserRound className="size-8" aria-hidden />
           </div>
           <div className="min-w-0 flex-1">
@@ -90,7 +90,7 @@ export default async function Page() {
                     href={href}
                     className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-primary-soft"
                   >
-                    <Icon className="size-5 text-primary" aria-hidden />
+                    <Icon className="size-5 text-text" aria-hidden />
                     <span className="flex-1 text-text">{label}</span>
                     <ChevronRight className="size-4 text-muted" aria-hidden />
                   </Link>

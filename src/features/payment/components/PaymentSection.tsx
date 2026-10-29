@@ -16,31 +16,7 @@ export function PaymentSection({
 }) {
   const [mode, setMode] = useState<"payment" | "skip">("payment");
   return (
-    <section className="pt-8">
-      {/* 탭 */}
-      <div className="flex border-b border-gray-200 mb-4">
-        <button
-          className={`flex-1 py-3 text-sm font-bold ${
-            mode === "payment"
-              ? "border-b-2 border-black text-black"
-              : "text-gray-400"
-          }`}
-          onClick={() => setMode("payment")}
-        >
-          실제 결제하기
-        </button>
-        <button
-          className={`flex-1 py-3 text-sm font-bold ${
-            mode === "skip"
-              ? "border-b-2 border-black text-black"
-              : "text-gray-400"
-          }`}
-          onClick={() => setMode("skip")}
-        >
-          결제 없이 체험하기
-        </button>
-      </div>
-
+    <section className=" ">
       {/* 탭에 따라 완전히 다른 영역 렌더링 */}
       {mode === "payment" ? (
         <TossPayments

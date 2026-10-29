@@ -49,7 +49,7 @@ export default async function Page({ params }: PageProps<"/booking/[id]">) {
     booking.status === "confirmed" || booking.status === "completed";
 
   return (
-    <div className="min-h-dvh bg-stone-50">
+    <div className="min-h-dvh ">
       <PageHeader title="예약 상세" back home />
       <main className="flex flex-col gap-3 px-page pt-17 pb-28">
         <BookingStatusGuide guide={guide} />

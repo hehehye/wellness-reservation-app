@@ -1,51 +1,39 @@
 import MainHeader from "@/features/shared/ui/MainHeader";
-import Link from "next/link";
-import { createClient } from "./utils/supabase/server";
-import { connection } from "next/server";
-import { Suspense } from "react";
-import Logoutbutton from "@/features/auth/components/LogoutButton";
 import RecentPlacesSection from "@/features/places/components/RecentPlacesSection";
+import BannerSlider from "@/features/banners/components/BannerSlider";
 
-async function AuthLinks() {
-  await connection(); // 요청 때 실행하겠다고 선언
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return user ? (
-    <li>
-      <Logoutbutton />
-    </li>
-  ) : (
-    <>
-      <li>
-        <Link href="/login">로그인</Link>
-      </li>
-      <li>
-        <Link href="/signup">회원가입</Link>
-      </li>
-    </>
-  );
-}
 export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
   return (
     <div>
       <MainHeader />
-      <div className="pt-16">
-        {/* <div>{session?.user.email}</div>
-        <ul className="cursor-pointer">
-          <Suspense fallback={null}>
-            <AuthLinks />
-          </Suspense>
-          <li>
-            <Link href="/place">플레이스</Link>
-          </li>
-        </ul> */}
+      <section className="pt-16">
+        <BannerSlider
+          banners={[
+            {
+              id: "1",
+              title: "배너1",
+              className: "bg-red-200",
+              image:
+                "https://ynzicwrajdrvagueafqe.supabase.co/storage/v1/object/public/assets/banners/banner1.png",
+            },
+            {
+              id: "2",
+              title: "배너2",
+              className: "bg-gray-200",
+              image:
+                "https://ynzicwrajdrvagueafqe.supabase.co/storage/v1/object/public/assets/banners/banner1.png",
+            },
+            {
+              id: "3",
+              title: "배너3",
+              className: "bg-gray-200",
+              image:
+                "https://ynzicwrajdrvagueafqe.supabase.co/storage/v1/object/public/assets/banners/banner1.png",
+            },
+          ]}
+        />
+      </section>
+      <div className="pt-4">
         <RecentPlacesSection />
       </div>
     </div>

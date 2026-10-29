@@ -7,23 +7,29 @@ import { usePostDraft } from "@/features/shared/hooks/usePostDraft";
 import { ReviewActions } from "../lib/ReviewActions";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export default function ReviewWriteForm({ bookingId }: { bookingId: string }) {
   const [state, formAction, pending] = useActionState(ReviewActions, undefined);
-  const { draft, error, addFiles, removeImage, setField, canSubmit } =
-    usePostDraft();
+  const { draft, error, addFiles, removeImage } = usePostDraft();
   const [rating, setRating] = useState(0);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (state?.error) toast.error(state.error);
-  }, [state]);
-
+    if (state?.success) {
+      toast.success(state.success);
+      const t = setTimeout(() => router.back(), 1200);
+      return () => clearTimeout(t);
+    }
+  }, [state, router]);
   return (
     <form action={formAction}>
       {" "}
       <input type="hidden" name="rating" value={rating} />
       <input type="hidden" name="bookingId" value={bookingId} />
       {/* 이미지 */}
-      <section aria-labelledby="images-label" className="flex flex-col gap-3">
+      {/* <section aria-labelledby="images-label" className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
           <h2 id="images-label" className="text-sm font-bold">
             사진
@@ -42,8 +48,8 @@ export default function ReviewWriteForm({ bookingId }: { bookingId: string }) {
             {error}
           </p>
         )}
-      </section>
-      <section className="mt-8 w-full flex justify-center">
+      </section> */}
+      <section className="mt-4 w-full flex justify-center">
         <StarRating value={rating} onChange={setRating} />
       </section>
       <textarea

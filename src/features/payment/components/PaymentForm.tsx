@@ -3,9 +3,9 @@
 import { useCallback, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/features/shared/lib/cn";
-import HoldTimer from "./HoldTimer";
-import type { BookingDetail } from "../types/Book";
+import type { BookingDetail } from "../../bookings/types/Book";
 import { PaymentSection } from "@/features/payment/components/PaymentSection";
+import HoldTimer from "@/features/bookings/components/HoldTimer";
 
 type Props = { booking: BookingDetail; customerKey: string };
 

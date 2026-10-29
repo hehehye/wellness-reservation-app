@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/app/utils/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { createReview } from "../api/reviews";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
@@ -37,6 +37,6 @@ export async function ReviewActions(
     return { error: e instanceof Error ? e.message : "저장에 실패했어요" };
   }
 
-  revalidatePath(`/place/${placeId}`);
-  redirect(`/place/${placeId}`);
+  revalidateTag("reviews", "max");
+  return { success: "리뷰가 등록됐어요!" };
 }

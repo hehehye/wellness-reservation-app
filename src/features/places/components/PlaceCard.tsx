@@ -11,10 +11,9 @@ export default function PlaceCard({ place }: Props) {
   return (
     <Link
       href={`/place/${place.id}`}
-      className="block overflow-hidden rounded-card border border-border bg-surface transition hover:shadow-md"
+      className="block overflow-hidden bg-surface transition hover:shadow-md"
     >
-      {/* 이미지 준비 전까지 더미 썸네일 */}
-      <div className="relative flex aspect-4/3 items-center justify-center bg-primary-soft text-muted">
+      <div className="relative overflow-hidden rounded-xl flex aspect-4/3.5 items-center justify-center bg-primary-soft text-muted">
         {place.imageUrl ? (
           <Image
             src={place.imageUrl}
@@ -29,11 +28,9 @@ export default function PlaceCard({ place }: Props) {
           </div>
         )}
       </div>
-      <div className="p-3">
-        <span className="text-xs font-medium text-primary">
-          {place.category}
-        </span>
-        <h3 className="mt-1 truncate font-bold text-text">{place.name}</h3>
+      <div className="p-1">
+        <span className="text-xs font-medium text-soft">{place.category}</span>
+        <h3 className="truncate font-bold text-text">{place.name}</h3>
       </div>
     </Link>
   );

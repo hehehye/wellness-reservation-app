@@ -8,11 +8,10 @@ type Props = {
   rows: Row[];
 };
 
-// 라벨-값 형태의 정보 목록 (결제 정보, 예약 정보 등)
 export default function BookingInfoSection({ title, rows }: Props) {
   return (
     <section className="rounded-card border border-border bg-surface p-5">
-      <h2 className="text-xs font-medium text-muted">{title}</h2>
+      <h2 className="text-xs font-bold text-muted ">{title}</h2>
       <dl className="mt-3 space-y-2.5 text-sm">
         {rows.map((row) => (
           <div

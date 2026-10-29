@@ -27,7 +27,7 @@ export default async function Page({
     : sessions;
   return (
     <main>
-      <PageHeader title="스케줄확인" back home />
+      <PageHeader title="스케줄 확인" back home />
       <section className="py-20 w-full">
         <SessionCalendar sessions={sessions} id={id} />
         <div className="py-2 my-2 w-full bg-stone-100" />

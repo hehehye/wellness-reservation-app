@@ -1,8 +1,8 @@
 import { createClient } from "@/app/utils/supabase/server";
 import { getBooking } from "@/features/bookings/api/bookings";
 import BookingSummaryCard from "@/features/bookings/components/BookingSummaryCard";
-import PaymentAmountCard from "@/features/bookings/components/PaymentAmountCard";
-import PaymentForm from "@/features/bookings/components/PaymentForm";
+import PaymentAmountCard from "@/features/payment/components/PaymentAmountCard";
+import PaymentForm from "@/features/payment/components/PaymentForm";
 import PageHeader from "@/features/shared/ui/PageHeader";
 import { redirect } from "next/navigation";
 
@@ -20,7 +20,7 @@ export default async function Page({
   const booking = await getBooking(bookingId, session.access_token);
 
   return (
-    <div className="min-h-dvh bg-stone-50">
+    <div className="min-h-dvh">
       <PageHeader title="결제하기" back />
       <main className="flex flex-col gap-3 px-page pt-17 pb-28">
         <BookingSummaryCard booking={booking} />

@@ -1,16 +1,22 @@
 import type { Place } from "@/features/places/types/Place";
 import { notFound } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
-
 // 장소 데이터는 자주 바뀌지 않으므로 60초마다 재검증 (ISR)
 // 'places' 태그로 revalidateTag('places') 호출 시 즉시 갱신 가능
-export async function getPlaces(q?: string): Promise<Place[]> {
+export async function getPlaces(
+  q?: string,
+  category?: string,
+  amenity?: string,
+): Promise<Place[]> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/places`);
 
   if (q) {
     url.searchParams.set("q", q);
   }
+  [category ?? []]
+    .flat()
+    .forEach((c) => url.searchParams.append("category", c));
+  [amenity ?? []].flat().forEach((a) => url.searchParams.append("amenity", a));
   const res = await fetch(url, {
     next: { revalidate: 60, tags: ["places"] },
   });
@@ -27,12 +33,15 @@ export async function getPlace(
   id: string,
   accessToken?: string,
 ): Promise<Place> {
-  const res = await fetch(`${API_URL}/places/${id}`, {
-    headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
-    ...(accessToken
-      ? { cache: "no-store" as const }
-      : { next: { revalidate: 60, tags: ["places", `place-${id}`] } }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/places/${id}`,
+    {
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+      ...(accessToken
+        ? { cache: "no-store" as const }
+        : { next: { revalidate: 60, tags: ["places", `place-${id}`] } }),
+    },
+  );
   if (res.status === 404) notFound();
   if (!res.ok) {
     throw new Error(`장소 정보를 불러오지 못했습니다. (${res.status})`);

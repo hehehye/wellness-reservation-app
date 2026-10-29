@@ -50,7 +50,11 @@ export default function LikeButton({ placeId, initialWish }: Props) {
       }}
       variant={"ghost"}
     >
-      {liked ? <Heart fill="red" className="text-red-500" /> : <Heart />}
+      {liked ? (
+        <Heart fill="red" className="text-red-500" size={26} />
+      ) : (
+        <Heart />
+      )}
     </Button>
   );
 }

@@ -8,7 +8,7 @@ export default function KakaoScript() {
   return (
     <Script
       id="kakao-maps-sdk"
-      src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false&libraries=services`}
+      src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false&libraries=services,clusterer`}
       strategy="afterInteractive"
       onLoad={() => {
         if (window.kakao && window.kakao.maps) {

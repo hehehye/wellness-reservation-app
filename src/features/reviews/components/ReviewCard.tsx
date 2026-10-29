@@ -1,6 +1,7 @@
-import { ImageIcon, MoreVertical, Star, User } from "lucide-react";
+import { Star, User } from "lucide-react";
 import type { Review } from "../types/Review";
 import Popover from "@/features/shared/ui/Popover";
+import { DeleteReviewButton } from "./ReviewManageButtons";
 
 // 별점 → 라벨
 const RATING_LABEL: Record<number, string> = {
@@ -44,7 +45,9 @@ export default function ReviewCard({
         </span>
         <Popover>
           {isMine ? (
-            <></>
+            <>
+              <DeleteReviewButton reviewId={review.id} />
+            </>
           ) : (
             <>
               <button
@@ -59,13 +62,16 @@ export default function ReviewCard({
         </Popover>
       </header>
 
-      <div className="mt-4 flex aspect-square w-1/2 items-center justify-center rounded-card bg-primary-soft/20 text-muted">
+      {/* <div className="mt-4 flex aspect-square w-1/2 items-center justify-center rounded-card bg-primary-soft/20 text-muted">
         <ImageIcon className="size-8" aria-hidden />
-      </div>
+      </div> */}
 
       {/* 본문 */}
       {review.content && (
-        <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-text">
+        <p
+          className="pt-6 pb-2 whitespace-pre-line text-sm leading-relaxed 
+        font-medium text-sub-text"
+        >
           {review.content}
         </p>
       )}
